@@ -26,6 +26,6 @@ and bookmark its path to solve this.
 ### Differences in `url.html`
 - Changed `<DOCTYPE! html>` to `data:text/html,` to enable url html
 - Changed all `#` to `%23` to allow them to render in the url
-- Changed `"`&nbsp;&nbsp;&nbsp;&nbsp;`"` (tab) to `"%20%20%20%20"` to allow render in url
+- Changed four space tab to `"%20%20%20%20"` to allow render in url
 - Removed unnecessary tags and closing tags
 - Removed unnecessary whitespace
