@@ -57,7 +57,7 @@
                 lines = this.value.split(/\r\n|\r|\n/).length;
                 if (last_line_count != lines) {
                     document.getElementById("lines").innerHTML = [...Array(lines).keys()]
-                        .map(i => `<span id="line${i+1}">${i+1}</span>`)
+                        .map(i => `<span id="line${i + 1}">${i + 1}</span>`)
                         .join("<br>");
                         last_line_count = lines;
                 }
@@ -78,7 +78,7 @@
                         try {
                             document.getElementById(`line${last_line}`)
                                 .style.color="#555";
-                        } finally {};
+                        } catch {};
                     };
                     last_line = line;
                     } ,0)
