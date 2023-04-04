@@ -3,15 +3,28 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
         <link rel="icon" type="image/x-icon" href="https://art.pixilart.com/sr22cf18a765fa2.png">
         <title>
             Notepad
         </title>
+        <style>
+            ::-webkit-scrollbar {
+                width: 14px;
+            }
+            ::-webkit-scrollbar-track {
+                background: #222;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: #333;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: #775;
+            }
+        </style>
     </head>
     <body style="background-color: #222;
                 margin: 0;
-                font: 2em monospace;">
+                font: 28px monospace;">
         <div style="margin: 2vh;
                     padding: 2vh;
                     border-radius: 10px;
@@ -19,17 +32,16 @@
                     min-height: 92vh;
                     display: flex;">
             <div id="lines" style="color: #555;
-                            flex: 1.5em;
+                            min-width: 2ch;
                             text-align: right;
-                            margin: 0 0.5em 0 0;">
+                            margin: 0 1ch 0 0;">
                 <span id="line1">1</span>
             </div>
-            <textarea id="editor" spellcheck="false" contenteditable="true" 
+            <textarea id="editor" spellcheck="false" contenteditable="true"
                     style="font: inherit;
                            resize: none;
                            padding: 0;
                            margin: 0;
-                           min-height: 100%;
                            width: 100%;
                            color: #ffe;
                            outline: 0;
@@ -37,11 +49,24 @@
                            border: 0;"></textarea>
         </div>
         <script>
-
             let editor = document.getElementById("editor");
             let last_line = 1;
             let last_line_count = 1;
         
+            function getBrs(text) {
+                temp = document.createElement('span');
+                temp.style.font = window.getComputedStyle(editor).font;
+                temp.style.fontSize = window.getComputedStyle(editor).fontSize;
+                temp.style.position = 'absolute';
+                temp.style.visibility = 'hidden';
+                temp.style['white-space'] = 'nowrap';
+                temp.textContent = text;
+                document.body.appendChild(temp);
+                const line_width = temp.getBoundingClientRect().width;
+                document.body.removeChild(temp);
+                return line_width;
+            }
+
             editor.addEventListener("keydown", function(e) {
                 if (e.key == "Tab") {
                     e.preventDefault();
@@ -54,12 +79,12 @@
                 });
         
             editor.addEventListener("input", function(e) {
-                lines = this.value.split(/\r\n|\r|\n/).length;
-                if (last_line_count != lines) {
-                    document.getElementById("lines").innerHTML = [...Array(lines).keys()]
-                        .map(i => `<span id="line${i + 1}">${i + 1}</span>`)
+                lines = this.value.split(/\r\n|\r|\n/);
+                if (last_line_count != lines.length) {
+                    document.getElementById("lines").innerHTML = [...Array(lines.length).keys()]
+                        .map(i => `<span id="line${i + 1}">${i + 1}${getBrs(lines[i])}</span>`)
                         .join("<br>");
-                        last_line_count = lines;
+                        last_line_count = lines.length;
                 }
                 });
         
@@ -73,7 +98,11 @@
                     let start = editor.selectionStart;
                     let line = editor.value.substring(0, start)
                                            .split(/\r\n|\r|\n/).length;
-                    document.getElementById(`line${line}`).style.color="#996";
+                    let lines = editor.value.split(/\r\n|\r|\n/);
+                    if (last_line_count == lines.length) {
+                        document.getElementById(`line${line}`).innerHTML = `${line}${getBrs([line - 1])}`;
+                        document.getElementById(`line${line}`).style.color="#996";
+                    }
                     if (last_line != line) {
                         try {
                             document.getElementById(`line${last_line}`)
