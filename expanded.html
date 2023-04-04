@@ -64,7 +64,7 @@
                 document.body.appendChild(temp);
                 const line_width = temp.getBoundingClientRect().width;
                 document.body.removeChild(temp);
-                return line_width;
+                return`<br>`.repeat(line_width / editor.scrollWidth);
             }
 
             editor.addEventListener("keydown", function(e) {
