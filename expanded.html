@@ -62,7 +62,7 @@
                 temp.style['white-space'] = 'nowrap';
                 temp.textContent = text;
                 document.body.appendChild(temp);
-                const line_width = temp.getBoundingClientRect().width;
+                let line_width = temp.getBoundingClientRect().width;
                 document.body.removeChild(temp);
                 return`<br>`.repeat(line_width / editor.scrollWidth);
             }
@@ -100,7 +100,7 @@
                                            .split(/\r\n|\r|\n/).length;
                     let lines = editor.value.split(/\r\n|\r|\n/);
                     if (last_line_count == lines.length) {
-                        document.getElementById(`line${line}`).innerHTML = `${line}${getBrs([line - 1])}`;
+                        document.getElementById(`line${line}`).innerHTML = `${line}${getBrs(lines[line - 1])}`;
                         document.getElementById(`line${line}`).style.color="#996";
                     }
                     if (last_line != line) {
